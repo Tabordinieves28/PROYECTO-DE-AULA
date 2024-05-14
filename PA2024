@@ -1,0 +1,161 @@
+import java.util.Scanner;
+import java.util.List;
+import java.util.ArrayList;
+
+public class PA2024 {
+
+    private static final String admin_user = "Luis";
+    private static final String admin_pass = "admin123";
+    private static int cedula;
+    private static final int total_cupos = 30;
+    private static int cuposdisponibles = total_cupos;
+    private static List<String> registros = new ArrayList<>();
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int opcion = 0;
+        do {
+            System.out.println("+--------------------------------------------------+");
+            System.out.println("|              Bienvenido al Parqueadero           |");
+            System.out.println("+--------------------------------------------------+");
+            System.out.println("| 1. Administrador                                 |");
+            System.out.println("| 2. Residente                                     |");
+            System.out.println("| 3. Salir                                         |");
+            System.out.println("+--------------------------------------------------+");
+            System.out.println("Seleccione una opcion:");
+
+            opcion = sc.nextInt();
+
+            switch (opcion) {
+                case 1:
+                    if (autenticarAdministrador(sc)) {
+                        menuAdministrador(sc);
+                    } else {
+                        System.out.println("Nombre de usuario o contraseña incorrectos.");
+                    }
+                    break;
+                case 2:
+                    menuResidente(sc);
+                    break;
+                case 3:
+                    System.out.println("Has salido del programa");
+                    break;
+                default:
+                    System.out.println("Escoge un numero desde el 1 al 3");
+                    break;
+            }
+        } while (opcion != 3);
+
+        sc.close();
+    }
+
+    public static boolean autenticarAdministrador(Scanner sc) {
+        System.out.println("Ingrese nombre de usuario:");
+        String usuario = sc.next();
+        System.out.println("Ingrese contraseña:");
+        String contraseña = sc.next();
+
+        return usuario.equals(admin_user) && contraseña.equals(admin_pass);
+    }
+
+    public static void menuAdministrador(Scanner sc) {
+        int opcion = 0;
+        do {
+            System.out.println("+-----------------------------------------------+");
+            System.out.println("|              Menu de Administrador            |");
+            System.out.println("+-----------------------------------------------+");
+            System.out.println("| 1. Consultar registros                         |");
+            System.out.println("| 2. Salir                                      |");
+            System.out.println("+-----------------------------------------------+");
+            System.out.println("Seleccione una opcion:");
+
+            opcion = sc.nextInt();
+
+            switch (opcion) {
+                case 1:
+                    System.out.println("Consulta de registros");
+                    consultarRegistros();
+                    break;
+                case 2:
+                    System.out.println("Volviendo al menú principal");
+                    break;
+                default:
+                    System.out.println("Escoge un numero desde el 1 al 2");
+                    break;
+            }
+        } while (opcion != 2);
+    }
+
+    public static void menuResidente(Scanner sc) {
+        int opcion = 0;
+        do {
+            System.out.println("+-----------------------------------------------+");
+            System.out.println("|              Menu de Residente                |");
+            System.out.println("+-----------------------------------------------+");
+            System.out.println("| 1. Ingresar vehiculo                           |");
+            System.out.println("| 2. Retirar vehiculo                            |");
+            System.out.println("| 3. Ver cupos disponibles                       |");
+            System.out.println("| 4. Volver al menu principal                    |");
+            System.out.println("+-----------------------------------------------+");
+            System.out.println("Seleccione una opcion:");
+
+            opcion = sc.nextInt();
+
+            switch (opcion) {
+                case 1:
+                    ingresarVehiculo();
+                    break;
+                case 2:
+                    retirarVehiculo();
+                    break;
+                case 3:
+                    verCuposDisponibles();
+                    break;
+                case 4:
+                    System.out.println("Volviendo al menu principal");
+                    break;
+                default:
+                    System.out.println("Escoge un numero desde el 1 al 4");
+                    break;
+            }
+        } while (opcion != 4);
+    }
+
+    public static void consultarRegistros() {
+        int entradas = 0;
+        int salidas = 0;
+        for (String registro : registros) {
+            if (registro.equals("Entrada")) {
+                entradas++;
+            } else if (registro.equals("Salida")) {
+                salidas++;
+            }
+        }
+        System.out.println("Numero de carros que entraron: " + entradas);
+        System.out.println("Numero de carros que salieron: " + salidas);
+    }
+
+    public static void ingresarVehiculo() {
+        if (cuposdisponibles > 0) {
+            cuposdisponibles--;
+            registros.add("Entrada");
+            System.out.println("Bienvenido a casa");
+        } else {
+            System.out.println("Lo sentimos, No hay cupos disponibles, por favor parquee afuera.");
+        }
+    }
+
+    public static void retirarVehiculo() {
+        if (cuposdisponibles < total_cupos) {
+            cuposdisponibles++;
+            registros.add("Salida");
+            System.out.println("Que tenga un buen dia");
+        } else {
+            System.out.println("No hay vehiculos para retirar.");
+        }
+    }
+
+    public static void verCuposDisponibles() {
+        System.out.println("Cupos disponibles: " + cuposdisponibles);
+    }
+}
